@@ -18,7 +18,7 @@ setup(
         'Django template plugin to be used to simplify static CDN resources '
         'connecting.'
     ),
-    long_description=read('README.rst'),
+    long_description=read('README.md'),
     author='Maxim Papezhuk',
     author_email='maxp.job@gmail.com',
     url='https://github.com/duverse/django-cdnjs',
