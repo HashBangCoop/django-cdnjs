@@ -401,4 +401,4 @@ class CDNStorage(object):
         :return tuple(str, str):
         """
         pair = repository_name.split('/')
-        return pair[0], pair[1] if len(pair) else None
+        return pair[0], pair[1] if len(pair) > 1 else None

@@ -33,7 +33,7 @@ always stable**
 
 **default-files.html**
 
-    {% load cdnjs %}
+    {% load cdnjstag %}
     
     <!DOCTYPE html>
     ...
@@ -47,7 +47,7 @@ after repository name and specify version. Example:
     
 **specify-version.html**
 
-    {% load cdnjs %}
+    {% load cdnjstag %}
     
     <!DOCTYPE html>
     ...
@@ -63,7 +63,7 @@ so we need to specify manually which file do we need.
     
 **specify-file.html**
 
-    {% load cdnjs %}
+    {% load cdnjstag %}
     
     <!DOCTYPE html>
     ...
