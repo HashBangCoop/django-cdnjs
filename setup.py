@@ -12,7 +12,7 @@ def read(*parts):
 setup(
     name='django-cdnjs',
     packages=find_packages(),
-    version='2017.10.19-0',
+    version='2017.10.20-1',
     license='MIT',
     description=(
         'Django template plugin to be used to simplify static CDN resources '
@@ -22,7 +22,7 @@ setup(
     author='Maxim Papezhuk',
     author_email='maxp.job@gmail.com',
     url='https://github.com/duverse/django-cdnjs',
-    download_url='https://github.com/duverse/django-cdnjs/tarball/v2017.10.19-0',
+    download_url='https://github.com/duverse/django-cdnjs/tarball/v2017.10.20-1.zip',
     keywords=[
         'django',
         'cdn',
