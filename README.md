@@ -20,7 +20,11 @@ Add `cdnjs` to your installed apps:
     INSTALLED_APPS = (
         ...
         'cdnjs',
-    )    
+    )
+    
+    # Configure settings
+    CDNJS_STATIC_ROOT = os.path.join(BASE_DIR, 'static', 'cdn')
+    CDNJS_STATIC_URL = '/static/cdn/' # With "/" at end of string
 
 # Usage example
 
@@ -85,12 +89,12 @@ Anyway, you should provide two django settings module properties
 
     # This property uses not only for storing remote repositories,
     # but for cdn urls cache too. So this option is required. 
-    CDN_STATIC_ROOT = os.path.join(BASE_DIR, 'static', 'cdn')
+    CDNJS_STATIC_ROOT = os.path.join(BASE_DIR, 'static', 'cdn')
         
     # This option is required, because I don't now why. You should
     # know that it's so. Even if you using FORCE_CDN.
     # If you want, you can contribute it and fix. =)
-    CDN_STATIC_URL = '/static/cdn/' # With "/" at end of string
+    CDNJS_STATIC_URL = '/static/cdn/' # With "/" at end of string
     
 
 ### Do not load remote repository
@@ -98,9 +102,18 @@ Anyway, you should provide two django settings module properties
 By default `cdnjs` downloads remote repository to be used without accessing 
 remote resources.
 
-    # If you need to use only cdn urls without repository downloading,
+    # If you need to use only local urli without CDN loading,
     # just set this option to True
-    FORCE_CDN = True
+    CDNJS_USE_LOCAL = True
      
-    # True - do not download remote repository
-    # False - (default) download remote repository
+    # True - download remote repository and use local URI
+    # False - (default) do not download remote repository and use CDN URI
+    
+    
+### Settings
+
+|Option|Default|Required|Comment|
+|---|---|---|---|
+|CDNJS_STATIC_ROOT|None|True|Absolute path to the cdn static root.|
+|CDNJS_STATIC_URL|None|True|Absolute path to the cdn static url.|
+|CDNJS_USE_LOCAL|False|False|Should tag download requested repository and use local URI instead of CDN URI.|

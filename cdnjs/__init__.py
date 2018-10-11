@@ -10,7 +10,7 @@ except ImportError:
 import os
 import json
 import requests
-from django.conf import settings
+from cdnjs.settings import Settings
 
 
 class RepositoryNotFoundException(Exception):
@@ -72,11 +72,10 @@ class CDNJsObject(object):
         :return:
         """
         for name, obj in self.files.items():
-            if item in name:
-                return obj['cdn' if getattr(settings, 'FORCE_CDN') else 'uri']
+            if name.endswith(item):
+                return obj['uri' if Settings.get('USE_LOCAL') else 'cdn']
 
-        raise FileNotFoundException(
-            'File {} was not found at {}'.format(item, self.name))
+        raise FileNotFoundException('File {} was not found at {}'.format(item, self.name))
 
     def __setitem__(self, key, value):
         """
@@ -86,8 +85,7 @@ class CDNJsObject(object):
         :return:
         """
         if 'uri' not in value or 'cdn' not in value:
-            raise InvalidFileException(
-                'File {} that is trying to add is invalid'.format(key))
+            raise InvalidFileException('File {} that is trying to add is invalid'.format(key))
 
         self.files[key] = value
 
@@ -139,7 +137,7 @@ class CDNJsObject(object):
         """
         # Create storage path
         storage_path = os.path.join(
-            settings.CDN_STATIC_ROOT,
+            Settings.get('STATIC_ROOT'),
             self.name,
             self.version)
 
@@ -152,7 +150,7 @@ class CDNJsObject(object):
             dir_path = os.path.join(storage_path, subdir)
             file_path = os.path.join(dir_path, name)
             file_uri = '{root}{name}/{version}/{subdir}{file}'.format(
-                root=settings.CDN_STATIC_URL,
+                root=Settings.get('STATIC_URL'),
                 name=self.name,
                 version=self.version,
                 subdir=subdir + '/' if subdir else '',
@@ -203,8 +201,7 @@ class CDNJs(object):
 
         # Check hits
         if realname is None:
-            raise RepositoryNotFoundException(
-                'Repository {} was not found'.format(name))
+            raise RepositoryNotFoundException('Repository {} was not found'.format(name))
 
         # Load version files
         return self._load_version(realname, version)
@@ -234,9 +231,6 @@ class CDNJs(object):
         :param version:
         :return CDNJsObject:
         """
-        # Result files
-        files = []
-
         # Load info about version
         response = json.loads(
             requests.get(
@@ -284,6 +278,7 @@ class CDNJs(object):
     def _file_cdn(self, repository, version, fname):
         """
         Returns file cdn
+        :param repository:
         :param version:
         :param fname:
         :return:
@@ -307,7 +302,7 @@ class CDNStorage(object):
     """
     CDN Storage
     """
-    DB_PATH = os.path.join(settings.CDN_STATIC_ROOT, 'cache.json')
+    DB_PATH = os.path.join(Settings.get('STATIC_ROOT'), 'cache.json')
 
     def __init__(self):
         self.database = list(self._load_db())
@@ -333,13 +328,12 @@ class CDNStorage(object):
         if repo is None:
             repo = self.storage.find(name, ver)
         if repo is None:
-            raise RepositoryNotFoundException(
-                'Repository {} was not found'.find(repository))
+            raise RepositoryNotFoundException('Repository {} was not found'.find(repository))
         else:
             self.database.append(repo)
 
         # If we need local URI
-        if not getattr(settings, 'FORCE_CDN'):
+        if Settings.get('USE_LOCAL'):
             repo.download()
 
         # Update database
