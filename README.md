@@ -91,7 +91,7 @@ If you want use CDNJS with [django-assets](https://django-assets.readthedocs.io/
     cdnjs_manager = CDNStorage()
     
     css = Bundle(
-        cdnjs_manager.get(font-awesome),
+        cdnjs_manager.get('font-awesome'),
         cdnjs_manager.get('mini.css'),
         filters='jsmin',
         output='css/app.css'
