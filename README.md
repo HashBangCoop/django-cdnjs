@@ -79,7 +79,37 @@ so we need to specify manually which file do we need.
     
 And here you can see that I had some typo in repository name. But `cdnjs` API 
 returns results by query term `bootstrap` and `twitter-bootstrap` is the first
-of them. So you can make typos. 
+of them. So you can make typos.
+
+If you want use CDNJS with [django-assets](https://django-assets.readthedocs.io/en/latest/):
+
+**specify-file.py**
+
+    from django_assets import Bundle, register
+    from cdnjs import CDNStorage
+    
+    cdnjs_manager = CDNStorage()
+    
+    css = Bundle(
+        cdnjs_manager.get(font-awesome),
+        cdnjs_manager.get('mini.css'),
+        filters='jsmin',
+        output='css/app.css'
+    )
+
+    register('css_all', css)
+
+**specify-file.html**
+
+    {% load assets %}
+
+    {% assets "css_all" %}
+        <link rel="stylesheet" type="text/style" href="{{ ASSET_URL }}"/>
+    {% endassets %}
+    
+
+Here, django-assets take libraries generates with django-cdnjs and package this in one file.
+Finally, include the bundle you defined in the appropriate place within your templates.
  
 # Configuration
 
