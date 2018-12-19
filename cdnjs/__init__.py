@@ -162,7 +162,7 @@ class CDNJsObject(object):
                     os.makedirs(dir_path)
 
                 with open(file_path, 'w') as f:
-                    for c in requests.get(path_data['cdn']):
+                    for c in requests.get(path_data['cdn']).text:
                         f.write(c)
                     f.close()
 
@@ -308,7 +308,7 @@ class CDNStorage(object):
         self.database = list(self._load_db())
         self.storage = CDNJs()
 
-    def get(self, repository, filename):
+    def get(self, repository, filename=None):
         """
         Returns CDN or URI
         :param repository:
